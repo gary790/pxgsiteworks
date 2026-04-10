@@ -201,6 +201,7 @@ export function layout(content: string, seo: SEOData): string {
         <div class="border-t border-zinc-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p class="text-gray-500 text-sm">&copy; ${new Date().getFullYear()} PXG Siteworks. All rights reserved.</p>
           <p class="text-gray-500 text-sm">Licensed & Insured | NC General Contractor</p>
+          <p class="text-gray-500 text-sm">Built by <a href="https://www.simplebuildai.com" target="_blank" rel="noopener noreferrer" class="hover:text-amber-500 transition-colors">SimpleBuild AI</a></p>
         </div>
       </div>
     </footer>
