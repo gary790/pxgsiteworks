@@ -188,7 +188,7 @@ export function layout(content: string, seo: SEOData): string {
             <ul class="space-y-2 text-gray-400">
               <li><a href="tel:+19105157779" onclick="trackPhoneClick()" class="hover:text-amber-500 transition-colors">(910) 515-7779</a></li>
               <li><a href="mailto:info@pxgsiteworks.com" class="hover:text-amber-500 transition-colors">info@pxgsiteworks.com</a></li>
-              <li>2407 Castle Hayne Rd<br>Wilmington, NC 28401</li>
+              <li>2415 Castle Hayne Rd<br>Wilmington, NC 28401</li>
             </ul>
             <div class="mt-6">
               <a href="https://www.facebook.com/profile.php?id=61585866854919" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-gray-400 hover:text-amber-500 transition-colors">

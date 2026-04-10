@@ -195,7 +195,7 @@ export function homePage(): string {
             ${[
               { title: 'Call Us', value: '(910) 515-7779', sub: 'Mon-Fri 7am-6pm' },
               { title: 'Email Us', value: 'info@pxgsiteworks.com', sub: 'We reply within 24hrs' },
-              { title: 'Visit Us', value: '2407 Castle Hayne Rd', sub: 'Wilmington, NC 28401' }
+              { title: 'Visit Us', value: '2415 Castle Hayne Rd', sub: 'Wilmington, NC 28401' }
             ].map(c => `
             <div class="flex items-start gap-4 p-5 bg-zinc-800/50 rounded-xl border border-zinc-700/50 hover:border-amber-600/30 transition-colors">
               <div class="w-12 h-12 bg-amber-600/10 rounded-xl flex items-center justify-center flex-shrink-0">
