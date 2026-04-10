@@ -1,11 +1,14 @@
 {
-  "name": "webapp",
+  "name": "pxg-siteworks",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "wrangler pages dev",
-    "deploy": "npm run build && wrangler pages deploy",
+    "preview": "wrangler pages dev dist",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name pxg-siteworks",
+    "dev:sandbox": "wrangler pages dev dist --d1=pxg_siteworks --local --ip 0.0.0.0 --port 3000",
+    "db:migrate:local": "wrangler d1 migrations apply pxg_siteworks --local",
+    "db:migrate:prod": "wrangler d1 migrations apply pxg_siteworks",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },
   "dependencies": {
