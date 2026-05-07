@@ -53,18 +53,18 @@ export function contactPage(): string {
                 </div>
                 <div id="cp-fields" class="space-y-4">
                   <div class="grid sm:grid-cols-2 gap-4">
-                    <div><label class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Name *</label><input name="name" required placeholder="John Smith" class="input-premium w-full h-12 rounded-xl px-4 text-sm"></div>
-                    <div><label class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Email *</label><input name="email" type="email" required placeholder="john@example.com" class="input-premium w-full h-12 rounded-xl px-4 text-sm"></div>
+                    <div><label for="cp-name" class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Name *</label><input id="cp-name" name="name" required placeholder="John Smith" class="input-premium w-full h-12 rounded-xl px-4 text-sm" autocomplete="name"></div>
+                    <div><label for="cp-email" class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Email *</label><input id="cp-email" name="email" type="email" required placeholder="john@example.com" class="input-premium w-full h-12 rounded-xl px-4 text-sm" autocomplete="email"></div>
                   </div>
                   <div class="grid sm:grid-cols-2 gap-4">
-                    <div><label class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Phone</label><input name="phone" type="tel" placeholder="(910) 515-7779" class="input-premium w-full h-12 rounded-xl px-4 text-sm"></div>
-                    <div><label class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Subject *</label>
-                      <select name="subject" required class="input-premium w-full h-12 rounded-xl px-4 text-sm">
+                    <div><label for="cp-phone" class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Phone</label><input id="cp-phone" name="phone" type="tel" placeholder="(910) 515-7779" class="input-premium w-full h-12 rounded-xl px-4 text-sm" autocomplete="tel"></div>
+                    <div><label for="cp-subject" class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Subject *</label>
+                      <select id="cp-subject" name="subject" required class="input-premium w-full h-12 rounded-xl px-4 text-sm">
                         <option value="">Select...</option><option value="Excavation">Excavation</option><option value="Site Grading">Site Grading</option><option value="Land Clearing">Land Clearing</option><option value="Drainage Solutions">Drainage Solutions</option><option value="Demolition & Hauling">Demolition & Hauling</option><option value="Site Preparation">Site Preparation</option><option value="Other">Other</option>
                       </select>
                     </div>
                   </div>
-                  <div><label class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Message *</label><textarea name="message" required rows="5" placeholder="Tell us more about your project..." class="input-premium w-full rounded-xl px-4 py-3 text-sm resize-none"></textarea></div>
+                  <div><label for="cp-message" class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Message *</label><textarea id="cp-message" name="message" required rows="5" placeholder="Tell us more about your project..." class="input-premium w-full rounded-xl px-4 py-3 text-sm resize-none"></textarea></div>
                   <button type="submit" id="cp-submit" class="btn-premium w-full bg-gradient-to-r from-amber-600 to-amber-500 text-white font-semibold py-3.5 text-base rounded-xl flex items-center justify-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>Send Message
                   </button>

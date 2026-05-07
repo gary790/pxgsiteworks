@@ -36,17 +36,17 @@ export function calculatorPage(): string {
             <p class="text-gray-500 text-sm mb-6">Tell us about your property size and tree coverage</p>
             <div class="space-y-6">
               <div>
-                <label class="text-white text-sm font-medium block mb-2">Lot Size (acres) *</label>
+                <label for="lot_size" class="text-white text-sm font-medium block mb-2">Lot Size (acres) *</label>
                 <input id="lot_size" type="number" step="0.1" min="0" placeholder="Enter lot size in acres" class="input-premium w-full h-12 rounded-xl px-4 text-sm">
               </div>
               <div>
-                <label class="text-white text-sm font-medium block mb-3">Tree Density *</label>
-                <div class="grid grid-cols-2 gap-3">
-                  <button type="button" onclick="selectOption('tree_density','medium',this)" class="density-btn p-5 border border-zinc-700/50 rounded-xl text-left hover:border-zinc-600 transition-all bg-zinc-900/30">
+                <span class="text-white text-sm font-medium block mb-3" id="tree-density-label">Tree Density *</span>
+                <div class="grid grid-cols-2 gap-3" role="radiogroup" aria-labelledby="tree-density-label">
+                  <button type="button" onclick="selectOption('tree_density','medium',this)" class="density-btn p-5 border border-zinc-700/50 rounded-xl text-left hover:border-zinc-600 transition-all bg-zinc-900/30" role="radio" aria-checked="false">
                     <div class="font-semibold text-white mb-0.5">Medium</div>
                     <div class="text-xs text-gray-500">Moderate coverage</div>
                   </button>
-                  <button type="button" onclick="selectOption('tree_density','heavy',this)" class="density-btn p-5 border border-zinc-700/50 rounded-xl text-left hover:border-zinc-600 transition-all bg-zinc-900/30">
+                  <button type="button" onclick="selectOption('tree_density','heavy',this)" class="density-btn p-5 border border-zinc-700/50 rounded-xl text-left hover:border-zinc-600 transition-all bg-zinc-900/30" role="radio" aria-checked="false">
                     <div class="font-semibold text-white mb-0.5">Heavy</div>
                     <div class="text-xs text-gray-500">Dense forest</div>
                   </button>
@@ -61,9 +61,9 @@ export function calculatorPage(): string {
             <h2 class="text-white text-xl font-bold mb-1 font-display">Equipment Access</h2>
             <p class="text-gray-500 text-sm mb-6">Help us understand equipment access to the site</p>
             <div class="space-y-6">
-              <div class="grid grid-cols-3 gap-3">
+              <div class="grid grid-cols-3 gap-3" role="radiogroup" aria-label="Equipment access difficulty">
                 ${['Easy|Direct access', 'Moderate|Some obstacles', 'Difficult|Limited access'].map(a => { const [t, d] = a.split('|'); return `
-                <button type="button" onclick="selectOption('access_difficulty','${t.toLowerCase()}',this)" class="access-btn p-5 border border-zinc-700/50 rounded-xl text-left hover:border-zinc-600 transition-all bg-zinc-900/30">
+                <button type="button" onclick="selectOption('access_difficulty','${t.toLowerCase()}',this)" class="access-btn p-5 border border-zinc-700/50 rounded-xl text-left hover:border-zinc-600 transition-all bg-zinc-900/30" role="radio" aria-checked="false">
                   <div class="font-semibold text-white mb-0.5 text-sm">${t}</div>
                   <div class="text-[11px] text-gray-500">${d}</div>
                 </button>` }).join('')}
@@ -98,14 +98,14 @@ export function calculatorPage(): string {
             <p class="text-gray-500 text-sm mb-6">Where should we send your quote?</p>
             <div class="space-y-4">
               <div class="grid sm:grid-cols-2 gap-4">
-                <div><label class="text-white text-sm font-medium block mb-2">Full Name *</label><input id="customer_name" placeholder="John Smith" class="input-premium w-full h-12 rounded-xl px-4 text-sm"></div>
-                <div><label class="text-white text-sm font-medium block mb-2">Email Address *</label><input id="customer_email" type="email" placeholder="john@example.com" class="input-premium w-full h-12 rounded-xl px-4 text-sm"></div>
+                <div><label for="customer_name" class="text-white text-sm font-medium block mb-2">Full Name *</label><input id="customer_name" placeholder="John Smith" class="input-premium w-full h-12 rounded-xl px-4 text-sm" autocomplete="name"></div>
+                <div><label for="customer_email" class="text-white text-sm font-medium block mb-2">Email Address *</label><input id="customer_email" type="email" placeholder="john@example.com" class="input-premium w-full h-12 rounded-xl px-4 text-sm" autocomplete="email"></div>
               </div>
               <div class="grid sm:grid-cols-2 gap-4">
-                <div><label class="text-white text-sm font-medium block mb-2">Phone Number</label><input id="customer_phone" type="tel" placeholder="(910) 515-7779" class="input-premium w-full h-12 rounded-xl px-4 text-sm"></div>
-                <div><label class="text-white text-sm font-medium block mb-2">Property Address</label><input id="property_address" placeholder="123 Main St, Wilmington, NC" class="input-premium w-full h-12 rounded-xl px-4 text-sm"></div>
+                <div><label for="customer_phone" class="text-white text-sm font-medium block mb-2">Phone Number</label><input id="customer_phone" type="tel" placeholder="(910) 515-7779" class="input-premium w-full h-12 rounded-xl px-4 text-sm" autocomplete="tel"></div>
+                <div><label for="property_address" class="text-white text-sm font-medium block mb-2">Property Address</label><input id="property_address" placeholder="123 Main St, Wilmington, NC" class="input-premium w-full h-12 rounded-xl px-4 text-sm" autocomplete="street-address"></div>
               </div>
-              <div><label class="text-white text-sm font-medium block mb-2">Additional Notes</label><textarea id="notes" rows="3" placeholder="Tell us anything else about your project..." class="input-premium w-full rounded-xl px-4 py-3 text-sm resize-none"></textarea></div>
+              <div><label for="notes" class="text-white text-sm font-medium block mb-2">Additional Notes</label><textarea id="notes" rows="3" placeholder="Tell us anything else about your project..." class="input-premium w-full rounded-xl px-4 py-3 text-sm resize-none"></textarea></div>
               <div class="bg-amber-500/5 border border-amber-500/15 rounded-xl p-4">
                 <p class="text-sm text-gray-300 flex items-center gap-2"><svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>By submitting, you'll receive an instant quote via email with a detailed breakdown.</p>
               </div>
@@ -159,8 +159,8 @@ export function calculatorPage(): string {
     function selectOption(field, value, btn) {
       calcData[field] = value;
       const group = field === 'tree_density' ? '.density-btn' : '.access-btn';
-      document.querySelectorAll(group).forEach(b => { b.classList.remove('border-amber-500/50', 'bg-amber-500/5'); b.classList.add('border-zinc-700/50', 'bg-zinc-900/30'); });
-      btn.classList.remove('border-zinc-700/50', 'bg-zinc-900/30'); btn.classList.add('border-amber-500/50', 'bg-amber-500/5');
+      document.querySelectorAll(group).forEach(b => { b.classList.remove('border-amber-500/50', 'bg-amber-500/5'); b.classList.add('border-zinc-700/50', 'bg-zinc-900/30'); b.setAttribute('aria-checked', 'false'); });
+      btn.classList.remove('border-zinc-700/50', 'bg-zinc-900/30'); btn.classList.add('border-amber-500/50', 'bg-amber-500/5'); btn.setAttribute('aria-checked', 'true');
     }
 
     function toggleService(cb) {

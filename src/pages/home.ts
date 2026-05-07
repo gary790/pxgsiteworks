@@ -211,7 +211,7 @@ export function homePage(): string {
 
     <!-- Lightbox -->
     <div id="lightbox" class="fixed inset-0 z-[60] bg-zinc-950/95 backdrop-blur-xl hidden items-center justify-center p-6" onclick="closeLightbox()">
-      <button class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors p-2" onclick="closeLightbox()">
+      <button class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors p-2" onclick="closeLightbox()" aria-label="Close lightbox">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
       </button>
       <div class="max-w-5xl w-full" onclick="event.stopPropagation()">
@@ -355,13 +355,13 @@ export function homePage(): string {
               </div>
               <div id="contact-fields">
                 <div class="grid sm:grid-cols-2 gap-4 mb-4">
-                  <div><label class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Your Name *</label><input name="name" required placeholder="John Smith" class="input-premium w-full h-12 rounded-xl px-4 text-sm"></div>
-                  <div><label class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Email Address *</label><input name="email" type="email" required placeholder="john@example.com" class="input-premium w-full h-12 rounded-xl px-4 text-sm"></div>
+                  <div><label for="home-name" class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Your Name *</label><input id="home-name" name="name" required placeholder="John Smith" class="input-premium w-full h-12 rounded-xl px-4 text-sm" autocomplete="name"></div>
+                  <div><label for="home-email" class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Email Address *</label><input id="home-email" name="email" type="email" required placeholder="john@example.com" class="input-premium w-full h-12 rounded-xl px-4 text-sm" autocomplete="email"></div>
                 </div>
                 <div class="grid sm:grid-cols-2 gap-4 mb-4">
-                  <div><label class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Phone Number</label><input name="phone" type="tel" placeholder="(910) 515-7779" class="input-premium w-full h-12 rounded-xl px-4 text-sm"></div>
-                  <div><label class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Service Needed</label>
-                    <select name="service" class="input-premium w-full h-12 rounded-xl px-4 text-sm">
+                  <div><label for="home-phone" class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Phone Number</label><input id="home-phone" name="phone" type="tel" placeholder="(910) 515-7779" class="input-premium w-full h-12 rounded-xl px-4 text-sm" autocomplete="tel"></div>
+                  <div><label for="home-service" class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Service Needed</label>
+                    <select id="home-service" name="service" class="input-premium w-full h-12 rounded-xl px-4 text-sm">
                       <option value="">Select a service...</option>
                       <option value="excavation">Excavation</option>
                       <option value="grading">Site Grading</option>
@@ -373,7 +373,7 @@ export function homePage(): string {
                     </select>
                   </div>
                 </div>
-                <div class="mb-5"><label class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Project Details *</label><textarea name="message" required rows="4" placeholder="Tell us about your project - location, scope, timeline, etc." class="input-premium w-full rounded-xl px-4 py-3 text-sm resize-none"></textarea></div>
+                <div class="mb-5"><label for="home-message" class="block text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">Project Details *</label><textarea id="home-message" name="message" required rows="4" placeholder="Tell us about your project - location, scope, timeline, etc." class="input-premium w-full rounded-xl px-4 py-3 text-sm resize-none" autocomplete="off"></textarea></div>
                 <button type="submit" id="contact-submit" class="btn-premium w-full bg-gradient-to-r from-amber-600 to-amber-500 text-white font-semibold h-13 py-3.5 text-base rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-amber-600/20">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
                   Send Message
