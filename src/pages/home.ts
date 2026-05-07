@@ -3,7 +3,7 @@ export function homePage(): string {
     <!-- ===== CINEMATIC HERO ===== -->
     <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
       <!-- Background Image with Ken Burns -->
-      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat bg-gray-900" style="background-image:url('https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697c0eafb66b5201f6fc0bd3/f8774276d_ChatGPTImageFeb13202602_17_16PM.png'); animation: float 25s ease-in-out infinite alternate; transform: scale(1.1); transform-origin: center;">
+      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat bg-gray-900" role="img" aria-label="Aerial view of PXG Siteworks excavation equipment at a job site in Wilmington NC" style="background-image:url('https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697c0eafb66b5201f6fc0bd3/f8774276d_ChatGPTImageFeb13202602_17_16PM.png'); animation: float 25s ease-in-out infinite alternate; transform: scale(1.1); transform-origin: center;">
       </div>
       <!-- Multi-layer cinematic overlay -->
       <div class="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/30 to-zinc-950"></div>
@@ -194,9 +194,9 @@ export function homePage(): string {
             { img: '225c5cd3b_MAX_0029.jpg', title: 'Site Grading', cat: 'Grading', desc: 'Precision grading for retail parking lot' },
             { img: '0edbe1433_20211106_171152.jpg', title: 'Septic Installation', cat: 'Septic Systems', desc: 'Complete septic system for residential property' }
           ].map(p => `
-          <div class="group relative rounded-2xl overflow-hidden cursor-pointer card-ultra" onclick="openLightbox(this)">
+          <div class="group relative rounded-2xl overflow-hidden card-ultra" role="button" tabindex="0" aria-label="View ${p.title} project photo" onclick="openLightbox(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLightbox(this)}">
             <div class="aspect-[4/3] overflow-hidden bg-zinc-800">
-              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697c0eafb66b5201f6fc0bd3/${p.img}" alt="${p.title}" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-full="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697c0eafb66b5201f6fc0bd3/${p.img}">
+              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697c0eafb66b5201f6fc0bd3/${p.img}" alt="${p.title} - ${p.desc}" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-full="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697c0eafb66b5201f6fc0bd3/${p.img}">
             </div>
             <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div class="absolute bottom-0 left-0 right-0 p-5 lg:p-6">
@@ -215,7 +215,7 @@ export function homePage(): string {
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
       </button>
       <div class="max-w-5xl w-full" onclick="event.stopPropagation()">
-        <img id="lightbox-img" src="" alt="" class="w-full rounded-2xl shadow-2xl">
+        <img id="lightbox-img" src="" alt="Project photo enlarged view" class="w-full rounded-2xl shadow-2xl">
       </div>
     </div>
 

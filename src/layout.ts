@@ -4,12 +4,14 @@ interface SEOData {
   canonical?: string
   ogImage?: string
   currentPage?: string
+  jsonLd?: string
 }
 
 export function layout(content: string, seo: SEOData): string {
   const ogImage = seo.ogImage || 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697c0eafb66b5201f6fc0bd3/fc6b71353_20240201_150031.jpg'
   const canonical = seo.canonical || 'https://www.pxgsiteworks.com'
   const currentPage = seo.currentPage || ''
+  const jsonLd = seo.jsonLd || ''
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -18,8 +20,10 @@ export function layout(content: string, seo: SEOData): string {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${seo.title}</title>
     <meta name="description" content="${seo.description}">
-    <meta name="keywords" content="excavation wilmington nc, site grading, land clearing, drainage solutions, demolition, site preparation">
+    <meta name="keywords" content="excavation wilmington nc, site grading, land clearing, drainage solutions, demolition, site preparation, excavation contractor, sitework wilmington">
     <meta name="google-site-verification" content="lIbqF7M55_EoILZCkCB6fWkg6zi33tODBtNtnUQN-Q0">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="PXG Siteworks">
     
     <meta property="og:title" content="${seo.title}">
     <meta property="og:description" content="${seo.description}">
@@ -35,10 +39,15 @@ export function layout(content: string, seo: SEOData): string {
     <link rel="canonical" href="${canonical}">
     <link rel="icon" type="image/svg+xml" href="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697c0eafb66b5201f6fc0bd3/c05a42444_PXGLOGO.PNG">
     
+    <!-- Preload critical hero image for LCP -->
+    <link rel="preload" as="image" href="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697c0eafb66b5201f6fc0bd3/f8774276d_ChatGPTImageFeb13202602_17_16PM.png" fetchpriority="high">
+    
     <!-- Google Fonts - Premium Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    ${jsonLd}
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -246,49 +255,60 @@ export function layout(content: string, seo: SEOData): string {
       img[loading="lazy"].loaded, img:not([loading="lazy"]) { opacity: 1; }
     </style>
 
-    <!-- Facebook Pixel -->
+    <!-- Facebook Pixel (deferred) -->
     <script>
-      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-      document,'script','https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '1436928034468748');
-      fbq('track', 'PageView');
+      window.addEventListener('load', function() {
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+        document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1436928034468748');
+        fbq('track', 'PageView');
+      });
     </script>
-    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1436928034468748&ev=PageView&noscript=1"></noscript>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1436928034468748&ev=PageView&noscript=1" alt=""></noscript>
 
-    <!-- GTM -->
+    <!-- GTM (deferred) -->
     <script>
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
-      var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-      j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-      f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-NC9ZFF76');
+      window.addEventListener('load', function() {
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+        var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+        j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+        f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-NC9ZFF76');
+      });
     </script>
 
-    <!-- GA4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7R5PCTP9ZC"></script>
+    <!-- GA4 (deferred) -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-7R5PCTP9ZC');
+      window.addEventListener('load', function() {
+        var s = document.createElement('script'); s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-7R5PCTP9ZC';
+        document.head.appendChild(s);
+      });
     </script>
 </head>
 <body class="min-h-screen bg-zinc-950 text-white overflow-x-hidden">
     <noscript>
-      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NC9ZFF76" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NC9ZFF76" height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe>
     </noscript>
 
+    <!-- Skip to main content (WCAG 2.4.1) -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[10000] focus:bg-amber-500 focus:text-black focus:px-6 focus:py-3 focus:rounded-lg focus:font-semibold focus:text-sm focus:shadow-lg">Skip to main content</a>
+
     <!-- Scroll Progress Bar -->
-    <div class="scroll-progress" id="scroll-progress" style="transform: scaleX(0);"></div>
+    <div class="scroll-progress" id="scroll-progress" style="transform: scaleX(0);" role="progressbar" aria-label="Page scroll progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 
     <!-- Custom Cursor (desktop only) -->
-    <div class="cursor-dot hidden lg:block" id="cursor-dot"></div>
-    <div class="cursor-ring hidden lg:block" id="cursor-ring"></div>
+    <div class="cursor-dot hidden lg:block" id="cursor-dot" aria-hidden="true"></div>
+    <div class="cursor-ring hidden lg:block" id="cursor-ring" aria-hidden="true"></div>
 
     <!-- ===== Premium Header ===== -->
-    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" role="banner">
       <div id="header-inner" class="transition-all duration-500">
         <!-- Top Accent Line -->
         <div class="h-[2px] bg-gradient-to-r from-transparent via-amber-500 to-transparent opacity-60"></div>
@@ -319,8 +339,8 @@ export function layout(content: string, seo: SEOData): string {
           </div>
 
           <!-- Mobile Menu Button -->
-          <button id="mobile-menu-btn" class="lg:hidden text-white p-2.5 rounded-xl hover:bg-white/5 transition-colors" aria-label="Open menu">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+          <button id="mobile-menu-btn" class="lg:hidden text-white p-2.5 rounded-xl hover:bg-white/5 transition-colors" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
           </button>
         </nav>
       </div>
@@ -348,10 +368,10 @@ export function layout(content: string, seo: SEOData): string {
     </header>
 
     <!-- ===== Page Content ===== -->
-    <main class="page-wrap">${content}</main>
+    <main id="main-content" class="page-wrap" role="main">${content}</main>
 
     <!-- ===== Premium Footer ===== -->
-    <footer class="relative bg-zinc-950 overflow-hidden">
+    <footer class="relative bg-zinc-950 overflow-hidden" role="contentinfo">
       <!-- Animated Orbs -->
       <div class="orb orb-2 -top-20 -right-20 opacity-30"></div>
       <div class="orb orb-3 bottom-10 -left-20 opacity-20"></div>
@@ -380,11 +400,11 @@ export function layout(content: string, seo: SEOData): string {
             <p class="text-gray-400 text-base leading-relaxed max-w-md mb-8">Professional excavation and site development services trusted by homeowners and builders across Southeastern North Carolina.</p>
             <!-- Social -->
             <div class="flex items-center gap-4">
-              <a href="https://www.facebook.com/profile.php?id=61585866854919" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-zinc-800/80 hover:bg-amber-600/20 border border-zinc-700/50 hover:border-amber-500/30 flex items-center justify-center text-gray-400 hover:text-amber-400 transition-all duration-300 hover:scale-110">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              <a href="https://www.facebook.com/profile.php?id=61585866854919" target="_blank" rel="noopener noreferrer" aria-label="Follow PXG Siteworks on Facebook" class="w-10 h-10 rounded-full bg-zinc-800/80 hover:bg-amber-600/20 border border-zinc-700/50 hover:border-amber-500/30 flex items-center justify-center text-gray-400 hover:text-amber-400 transition-all duration-300 hover:scale-110">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
               </a>
-              <a href="mailto:info@pxgsiteworks.com" class="w-10 h-10 rounded-full bg-zinc-800/80 hover:bg-amber-600/20 border border-zinc-700/50 hover:border-amber-500/30 flex items-center justify-center text-gray-400 hover:text-amber-400 transition-all duration-300 hover:scale-110">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              <a href="mailto:info@pxgsiteworks.com" aria-label="Email PXG Siteworks" class="w-10 h-10 rounded-full bg-zinc-800/80 hover:bg-amber-600/20 border border-zinc-700/50 hover:border-amber-500/30 flex items-center justify-center text-gray-400 hover:text-amber-400 transition-all duration-300 hover:scale-110">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
               </a>
             </div>
           </div>
@@ -508,6 +528,7 @@ export function layout(content: string, seo: SEOData): string {
       menuBtn.addEventListener('click', () => {
         menuOpen = !menuOpen;
         mobileMenu.classList.toggle('hidden');
+        menuBtn.setAttribute('aria-expanded', menuOpen.toString());
         menuBtn.innerHTML = menuOpen
           ? '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>'
           : '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
@@ -515,7 +536,8 @@ export function layout(content: string, seo: SEOData): string {
       function closeMobileMenu() {
         mobileMenu.classList.add('hidden');
         menuOpen = false;
-        menuBtn.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
+        menuBtn.setAttribute('aria-expanded', 'false');
+        menuBtn.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
       }
 
       // ===== Intersection Observer for scroll animations =====

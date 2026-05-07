@@ -36,7 +36,7 @@ export function contactPage(): string {
             </div>`).join('')}
             
             <div class="relative rounded-xl overflow-hidden h-56 border border-zinc-800/50">
-              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d105762.67984895776!2d-77.95766458261068!3d34.22571420597901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89a9f5a20debaed5%3A0x5e66493884093032!2sWilmington%2C%20NC!5e0!3m2!1sen!2sus" class="w-full h-full grayscale opacity-60 hover:opacity-80 hover:grayscale-0 transition-all duration-500" style="border:0" allowfullscreen loading="lazy"></iframe>
+              <iframe title="PXG Siteworks location on Google Maps - Wilmington, NC" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d105762.67984895776!2d-77.95766458261068!3d34.22571420597901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89a9f5a20debaed5%3A0x5e66493884093032!2sWilmington%2C%20NC!5e0!3m2!1sen!2sus" class="w-full h-full grayscale opacity-60 hover:opacity-80 hover:grayscale-0 transition-all duration-500" style="border:0" allowfullscreen loading="lazy"></iframe>
             </div>
           </div>
           
