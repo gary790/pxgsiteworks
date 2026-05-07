@@ -186,6 +186,95 @@ const services: Record<string, ServiceData> = {
   },
 }
 
+// Service FAQ data for visible FAQ sections on each page
+const serviceFaqData: Record<string, {q: string; a: string}[]> = {
+  'excavation': [
+    {q: 'How much does excavation cost in Wilmington NC?', a: 'Residential excavation in Wilmington typically ranges from $1,500 to $10,000+ depending on scope. Foundation digs, trenching, and backfill are priced based on volume of earth moved and site access.'},
+    {q: 'How long does a typical excavation project take?', a: 'Most residential excavation projects are completed in 1-3 days. Larger commercial projects may take 1-2 weeks depending on complexity and weather.'},
+    {q: 'Do I need a permit for excavation?', a: 'Most excavation work associated with construction requires a building permit. We handle permitting as part of our service.'}
+  ],
+  'site-grading': [
+    {q: 'How much does site grading cost in Wilmington NC?', a: 'Residential site grading typically costs $1,000-$5,000 for standard lots. Larger lots range $3,000-$10,000. Finish grading averages $500-$2,000.'},
+    {q: 'What is the difference between rough grading and finish grading?', a: 'Rough grading establishes the basic contours and elevation. Finish grading is the precision work that creates the final surface for landscaping and ensures proper drainage.'},
+    {q: 'Why is proper grading important?', a: 'Proper grading prevents water from pooling around foundations, which can cause structural damage, mold, and erosion. It is critical for long-term property protection.'}
+  ],
+  'land-clearing': [
+    {q: 'How much does land clearing cost per acre in Wilmington NC?', a: 'Light clearing runs $1,500-$3,000/acre, medium clearing $3,000-$5,000/acre, and heavy clearing $4,000-$8,000/acre in the Wilmington area.'},
+    {q: 'Can I clear land myself?', a: 'Small brush clearing is possible for homeowners, but projects involving trees over 6 inches in diameter, stumps, or grading should be done by a licensed contractor with proper equipment and insurance.'},
+    {q: 'Do you offer onsite disposal?', a: 'Yes. Where permitted, we can mulch or bury cleared material onsite, which can significantly reduce hauling costs.'}
+  ],
+  'drainage-solutions': [
+    {q: 'How much does a French drain cost in Wilmington NC?', a: 'French drain installation typically costs $25-$50 per linear foot in Wilmington. A typical residential French drain system runs $2,000-$6,000 depending on length and depth.'},
+    {q: 'How do I know if I need a drainage system?', a: 'Signs include standing water after rain, wet or soggy areas in your yard, water in your crawl space or basement, and erosion along your foundation.'},
+    {q: 'What type of drainage system do I need?', a: 'We assess your property to recommend the best solution — French drains, catch basins, regrading, or a combination. Every property is different.'}
+  ],
+  'hauling-demolition': [
+    {q: 'How much does demolition cost in Wilmington NC?', a: 'Small structures like sheds cost $1,000-$5,000. Residential home demolition ranges $8,000-$25,000. Commercial demolition starts at $15,000+.'},
+    {q: 'Do I need a permit for demolition?', a: 'Yes. Demolition permits are required in New Hanover County and most NC municipalities. We handle all permitting as part of our service.'},
+    {q: 'Do you handle hazardous material abatement?', a: 'We coordinate with licensed environmental specialists for asbestos, lead paint, and other hazardous material assessments and abatement when needed.'}
+  ],
+  'site-preparation': [
+    {q: 'What does site preparation include?', a: 'Site prep typically includes clearing, grubbing, rough grading, erosion control, utility prep, and access road construction to make the site ready for building.'},
+    {q: 'How long does site preparation take?', a: 'A typical residential site prep takes 3-7 days. Larger commercial sites may take 2-4 weeks depending on scope and conditions.'},
+    {q: 'Do you handle permits for site work?', a: 'Yes. We coordinate grading permits, erosion control plans, and other required permits with local authorities.'}
+  ],
+  'utilities': [
+    {q: 'What types of utilities do you install?', a: 'We handle trenching and installation for water lines, sewer lines, storm drainage, electrical conduit, and communication conduit.'},
+    {q: 'How deep are utility trenches?', a: 'Depth varies by utility type: water lines 18-36 inches, sewer lines 24-48+ inches, and electrical conduit 18-24 inches, per NC code requirements.'},
+    {q: 'Do you call 811 before digging?', a: 'Absolutely. We coordinate with NC 811 on every project to locate existing underground utilities before any trenching begins.'}
+  ],
+  'driveway': [
+    {q: 'How much does a gravel driveway cost?', a: 'A basic gravel driveway in Wilmington typically costs $500-$2,500 depending on length, width, and base preparation required.'},
+    {q: 'Do I need a culvert for my driveway?', a: 'If your driveway crosses a ditch or drainage swale, a culvert is typically required by local code to maintain water flow.'},
+    {q: 'How long does driveway installation take?', a: 'Most residential driveway projects are completed in 1-2 days including base prep, grading, and material installation.'}
+  ],
+  'grading': [
+    {q: 'What is the difference between rough and fine grading?', a: 'Rough grading shapes the land with heavy equipment to set basic contours. Fine grading uses precision equipment to create the final surface for landscaping or construction.'},
+    {q: 'How much does grading cost per acre?', a: 'Residential lot grading typically costs $1,000-$5,000. Larger properties run $3,000-$10,000+ depending on terrain and soil conditions.'},
+    {q: 'When should I grade my property?', a: 'Grade before construction, after construction for finish work, or anytime you notice drainage problems, standing water, or erosion issues.'}
+  ],
+  'drainage': [
+    {q: 'What causes poor drainage in yards?', a: 'Common causes include flat terrain, clay soil, improper grading, clogged gutters directing water near foundations, and compacted soil from construction.'},
+    {q: 'How much do drainage solutions cost?', a: 'Simple regrading starts at $500-$1,500. French drains run $2,000-$6,000. Complete drainage systems for larger properties can cost $5,000-$15,000+.'},
+    {q: 'Can you fix drainage without digging up my whole yard?', a: 'Often yes. We use targeted solutions like French drains, catch basins, and strategic regrading that minimize disruption to your existing landscaping.'}
+  ]
+}
+
+function getServiceFaqHtml(slug: string): string {
+  const faqs = serviceFaqData[slug]
+  if (!faqs || faqs.length === 0) return ''
+  
+  return `
+    <section class="py-20 lg:py-28 section-divider">
+      <div class="max-w-4xl mx-auto px-6">
+        <div class="reveal text-center mb-12">
+          <span class="inline-flex items-center gap-2 text-amber-400 font-medium tracking-widest uppercase text-xs mb-4">
+            <span class="w-8 h-px bg-amber-500/50"></span>Common Questions<span class="w-8 h-px bg-amber-500/50"></span>
+          </span>
+          <h2 class="text-3xl lg:text-4xl font-bold text-white mt-2 mb-4 font-display">Frequently Asked Questions</h2>
+        </div>
+        <div class="space-y-4 stagger-children">
+          ${faqs.map((faq, i) => `
+          <div class="card-ultra rounded-xl overflow-hidden">
+            <button class="w-full flex items-center justify-between p-5 lg:p-6 text-left group" onclick="this.parentElement.classList.toggle('faq-open');this.querySelector('.faq-chevron').classList.toggle('rotate-180')" aria-expanded="false">
+              <span class="text-white font-semibold text-sm lg:text-base pr-4">${faq.q}</span>
+              <svg class="faq-chevron w-5 h-5 text-amber-400 flex-shrink-0 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="overflow-hidden transition-all duration-300 max-h-0 faq-answer" style="${i === 0 ? 'max-height:200px' : ''}">
+              <div class="px-5 lg:px-6 pb-5 lg:pb-6 pt-0">
+                <p class="text-gray-400 text-sm leading-relaxed">${faq.a}</p>
+              </div>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </section>
+    <style>
+      .faq-open .faq-answer { max-height: 200px !important; }
+      .faq-answer { transition: max-height 0.3s ease; }
+    </style>`
+}
+
 export function servicePage(slug: string): string {
   const s = services[slug]
   if (!s) return `<div class="min-h-screen bg-zinc-950 pt-32 pb-20 px-6 text-center"><h1 class="text-4xl font-bold text-white font-display">Service Not Found</h1><a href="/" class="text-amber-400 hover:underline mt-4 inline-block">Back to Home</a></div>`
@@ -310,6 +399,9 @@ export function servicePage(slug: string): string {
         </div>
       </div>
     </section>
+    
+    <!-- FAQ Section -->
+    ${getServiceFaqHtml(slug)}
     
     <!-- CTA -->
     <section class="py-20 lg:py-24">

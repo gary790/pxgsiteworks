@@ -210,7 +210,7 @@ export function homePage(): string {
     </section>
 
     <!-- Lightbox -->
-    <div id="lightbox" class="fixed inset-0 z-[60] bg-zinc-950/95 backdrop-blur-xl hidden items-center justify-center p-6" onclick="closeLightbox()">
+    <div id="lightbox" class="fixed inset-0 z-[60] bg-zinc-950/95 backdrop-blur-xl hidden items-center justify-center p-6" role="dialog" aria-modal="true" aria-label="Project photo lightbox" tabindex="-1" onclick="if(event.target===this)closeLightbox()" onkeydown="if(event.key==='Escape')closeLightbox()">
       <button class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors p-2" onclick="closeLightbox()" aria-label="Close lightbox">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
       </button>
@@ -404,8 +404,10 @@ export function homePage(): string {
       function openLightbox(el) {
         const img = el.querySelector('img');
         document.getElementById('lightbox-img').src = img.dataset.full || img.src;
-        document.getElementById('lightbox').classList.remove('hidden');
-        document.getElementById('lightbox').classList.add('flex');
+        const lb = document.getElementById('lightbox');
+        lb.classList.remove('hidden');
+        lb.classList.add('flex');
+        lb.focus();
         document.body.style.overflow = 'hidden';
       }
       function closeLightbox() {
@@ -413,7 +415,6 @@ export function homePage(): string {
         document.getElementById('lightbox').classList.remove('flex');
         document.body.style.overflow = '';
       }
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 
       async function submitContactForm(e) {
         e.preventDefault();

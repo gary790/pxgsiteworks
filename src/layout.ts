@@ -315,7 +315,7 @@ export function layout(content: string, seo: SEOData): string {
         
         <nav class="max-w-7xl mx-auto px-6 lg:px-8 py-3 flex items-center justify-between">
           <!-- Logo -->
-          <a href="/" class="flex items-center gap-3 group">
+          <a href="/" class="flex items-center gap-3 group" aria-label="PXG Siteworks - Home">
             <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697c0eafb66b5201f6fc0bd3/c05a42444_PXGLOGO.PNG" alt="PXG Siteworks Logo" class="h-16 lg:h-20 w-auto transition-all duration-500 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(245,158,11,0.3)]">
           </a>
 
@@ -394,7 +394,7 @@ export function layout(content: string, seo: SEOData): string {
         <div class="py-16 lg:py-20 grid lg:grid-cols-12 gap-12 lg:gap-8">
           <!-- Brand Column -->
           <div class="lg:col-span-5">
-            <a href="/" class="inline-block mb-6">
+            <a href="/" class="inline-block mb-6" aria-label="PXG Siteworks - Home">
               <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697c0eafb66b5201f6fc0bd3/c05a42444_PXGLOGO.PNG" alt="PXG Siteworks" class="h-16 w-auto">
             </a>
             <p class="text-gray-400 text-base leading-relaxed max-w-md mb-8">Professional excavation and site development services trusted by homeowners and builders across Southeastern North Carolina.</p>

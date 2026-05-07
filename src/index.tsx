@@ -40,7 +40,7 @@ app.use('/api/*', cors())
 // ========== Organization JSON-LD (shared across all pages) ==========
 const orgSchema = `<script type="application/ld+json">{
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+  "@type": ["HomeAndConstructionBusiness", "LocalBusiness", "Organization", "GeneralContractor"],
   "@id": "https://www.pxgsiteworks.com/#organization",
   "name": "PXG Siteworks",
   "alternateName": "PXG Siteworks LLC",
@@ -128,7 +128,7 @@ function breadcrumb(items: {name: string; url: string}[]): string {
 }</script>`
 }
 
-// Helper: build Service JSON-LD
+// Helper: build Service JSON-LD with Offer
 function serviceSchema(name: string, desc: string, url: string): string {
   return `<script type="application/ld+json">{
   "@context": "https://schema.org",
@@ -138,8 +138,148 @@ function serviceSchema(name: string, desc: string, url: string): string {
   "url": "${url}",
   "provider": {"@id": "https://www.pxgsiteworks.com/#organization"},
   "areaServed": {"@type": "State", "name": "North Carolina"},
-  "serviceType": "Excavation and Site Development"
+  "serviceType": "Excavation and Site Development",
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "price": "0",
+    "description": "Free on-site estimate",
+    "availability": "https://schema.org/InStock",
+    "url": "${url}",
+    "validFrom": "2026-01-01"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "${name}",
+    "itemListElement": [
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "${name} - Free Estimate", "description": "Free on-site consultation and detailed written estimate"}}
+    ]
+  }
 }</script>`
+}
+
+// Helper: build HowTo JSON-LD for service pages
+function howToSchema(name: string, steps: {name: string; text: string}[]): string {
+  return `<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Get ${name} in Wilmington NC",
+  "description": "Step-by-step guide to getting professional ${name.toLowerCase()} services from PXG Siteworks in Wilmington, NC.",
+  "totalTime": "P3D",
+  "estimatedCost": {"@type": "MonetaryAmount", "currency": "USD", "value": "0", "description": "Free estimate"},
+  "step": [${steps.map((s, i) => `
+    {"@type": "HowToStep", "position": ${i + 1}, "name": "${s.name}", "text": "${s.text.replace(/"/g, '\\"')}"}`).join(',')}
+  ]
+}</script>`
+}
+
+// Helper: build FAQ JSON-LD for service pages
+function serviceFaqSchema(faqs: {q: string; a: string}[]): string {
+  return `<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [${faqs.map(f => `
+    {"@type": "Question", "name": "${f.q.replace(/"/g, '\\"')}", "acceptedAnswer": {"@type": "Answer", "text": "${f.a.replace(/"/g, '\\"')}"}}`).join(',')}
+  ]
+}</script>`
+}
+
+// Service-specific HowTo steps and FAQs
+const serviceHowToSteps: Record<string, {name: string; text: string}[]> = {
+  'excavation': [
+    {name: 'Request a Free Estimate', text: 'Call (910) 515-7779 or fill out our online form. We will schedule a free site visit within 48 hours.'},
+    {name: 'Site Assessment', text: 'Our team visits your property to evaluate soil conditions, access, utilities, and scope of work.'},
+    {name: 'Receive Your Quote', text: 'We provide a detailed written estimate with a clear breakdown of costs, timeline, and scope.'},
+    {name: 'Schedule the Work', text: 'Once approved, we schedule your project and handle all necessary permits.'},
+    {name: 'Excavation Execution', text: 'Our crew completes the excavation using the right equipment for your specific project.'},
+    {name: 'Final Inspection', text: 'We perform a walkthrough to ensure everything meets specifications and your satisfaction.'}
+  ],
+  'site-grading': [
+    {name: 'Request a Free Estimate', text: 'Contact us at (910) 515-7779 for a free grading consultation and site visit.'},
+    {name: 'Topographic Survey', text: 'We assess existing grades, drainage patterns, and soil conditions on your property.'},
+    {name: 'Grading Plan', text: 'We develop a grading plan that ensures proper drainage away from structures.'},
+    {name: 'Rough Grading', text: 'Heavy equipment shapes the land to establish basic contours and elevation.'},
+    {name: 'Fine Grading', text: 'Precision grading creates the final surface for landscaping and construction.'},
+    {name: 'Quality Check', text: 'We verify grades meet specifications and water flows correctly.'}
+  ],
+  'land-clearing': [
+    {name: 'Request a Free Estimate', text: 'Call (910) 515-7779 or use our online calculator for an instant estimate.'},
+    {name: 'Property Assessment', text: 'We visit your property to assess tree density, access, and clearing requirements.'},
+    {name: 'Clearing Plan', text: 'We identify trees to keep, removal methods, and debris disposal options.'},
+    {name: 'Tree and Brush Removal', text: 'Our crew clears vegetation using excavators, mulchers, and chainsaws.'},
+    {name: 'Stump Removal', text: 'Stumps are ground or extracted below grade as needed for construction.'},
+    {name: 'Site Cleanup', text: 'Debris is hauled away and the site is left clean and ready for the next phase.'}
+  ],
+  'drainage-solutions': [
+    {name: 'Request a Free Estimate', text: 'Call (910) 515-7779 to schedule a free drainage assessment.'},
+    {name: 'Drainage Assessment', text: 'We identify water flow issues, low spots, and problem areas on your property.'},
+    {name: 'System Design', text: 'We design a drainage solution tailored to your property and local conditions.'},
+    {name: 'Trenching and Installation', text: 'Our crew installs French drains, catch basins, pipes, or other drainage systems.'},
+    {name: 'Grading Adjustments', text: 'We regrade areas as needed to direct water toward drainage systems.'},
+    {name: 'Flow Testing', text: 'We test the system to ensure proper water flow and drainage performance.'}
+  ],
+  'hauling-demolition': [
+    {name: 'Request a Free Estimate', text: 'Call (910) 515-7779 for a free demolition consultation.'},
+    {name: 'Safety Assessment', text: 'We inspect the structure for hazardous materials, utilities, and safety concerns.'},
+    {name: 'Permitting', text: 'We obtain all necessary demolition permits from local authorities.'},
+    {name: 'Controlled Demolition', text: 'Our crew safely tears down the structure using appropriate equipment.'},
+    {name: 'Debris Hauling', text: 'All demolition debris is loaded and hauled to approved disposal facilities.'},
+    {name: 'Site Restoration', text: 'The site is graded clean and ready for new construction or landscaping.'}
+  ],
+  'site-preparation': [
+    {name: 'Request a Free Estimate', text: 'Call (910) 515-7779 for a free site prep consultation.'},
+    {name: 'Site Survey', text: 'We review site plans and assess conditions including soil, access, and utilities.'},
+    {name: 'Clearing and Grubbing', text: 'We remove all vegetation, stumps, and debris from the building area.'},
+    {name: 'Rough Grading', text: 'The site is graded to establish proper elevations and drainage.'},
+    {name: 'Utility Preparation', text: 'We prepare trenches and paths for water, sewer, and electrical lines.'},
+    {name: 'Final Prep', text: 'The site is compacted, staked, and ready for construction to begin.'}
+  ],
+  'utilities': [
+    {name: 'Request a Free Estimate', text: 'Call (910) 515-7779 for a free utility trenching consultation.'},
+    {name: 'Utility Layout', text: 'We review plans and mark locations for water, sewer, electrical, and drainage lines.'},
+    {name: 'Call Before You Dig', text: 'We coordinate with NC 811 to locate existing underground utilities.'},
+    {name: 'Trenching', text: 'Our crew digs trenches to the specified depth and grade for each utility.'},
+    {name: 'Pipe and Conduit Installation', text: 'Utilities are installed according to code and specifications.'},
+    {name: 'Backfill and Compaction', text: 'Trenches are backfilled and compacted to prevent settling.'}
+  ]
+}
+
+const serviceFaqs: Record<string, {q: string; a: string}[]> = {
+  'excavation': [
+    {q: 'How much does excavation cost in Wilmington NC?', a: 'Residential excavation in Wilmington typically ranges from $1,500 to $10,000+ depending on scope. Foundation digs, trenching, and backfill are priced based on volume of earth moved and site access.'},
+    {q: 'How long does a typical excavation project take?', a: 'Most residential excavation projects are completed in 1-3 days. Larger commercial projects may take 1-2 weeks depending on complexity and weather.'},
+    {q: 'Do I need a permit for excavation?', a: 'Most excavation work associated with construction requires a building permit. We handle permitting as part of our service.'}
+  ],
+  'site-grading': [
+    {q: 'How much does site grading cost in Wilmington NC?', a: 'Residential site grading typically costs $1,000-$5,000 for standard lots. Larger lots range $3,000-$10,000. Finish grading averages $500-$2,000.'},
+    {q: 'What is the difference between rough grading and finish grading?', a: 'Rough grading establishes the basic contours and elevation. Finish grading is the precision work that creates the final surface for landscaping and ensures proper drainage.'},
+    {q: 'Why is proper grading important?', a: 'Proper grading prevents water from pooling around foundations, which can cause structural damage, mold, and erosion. It is critical for long-term property protection.'}
+  ],
+  'land-clearing': [
+    {q: 'How much does land clearing cost per acre in Wilmington NC?', a: 'Light clearing runs $1,500-$3,000/acre, medium clearing $3,000-$5,000/acre, and heavy clearing $4,000-$8,000/acre in the Wilmington area.'},
+    {q: 'Can I clear land myself?', a: 'Small brush clearing is possible for homeowners, but projects involving trees over 6 inches in diameter, stumps, or grading should be done by a licensed contractor with proper equipment and insurance.'},
+    {q: 'Do you offer onsite disposal?', a: 'Yes. Where permitted, we can mulch or bury cleared material onsite, which can significantly reduce hauling costs.'}
+  ],
+  'drainage-solutions': [
+    {q: 'How much does a French drain cost in Wilmington NC?', a: 'French drain installation typically costs $25-$50 per linear foot in Wilmington. A typical residential French drain system runs $2,000-$6,000 depending on length and depth.'},
+    {q: 'How do I know if I need a drainage system?', a: 'Signs include standing water after rain, wet or soggy areas in your yard, water in your crawl space or basement, and erosion along your foundation.'},
+    {q: 'What type of drainage system do I need?', a: 'We assess your property to recommend the best solution — French drains, catch basins, regrading, or a combination. Every property is different.'}
+  ],
+  'hauling-demolition': [
+    {q: 'How much does demolition cost in Wilmington NC?', a: 'Small structures like sheds cost $1,000-$5,000. Residential home demolition ranges $8,000-$25,000. Commercial demolition starts at $15,000+.'},
+    {q: 'Do I need a permit for demolition?', a: 'Yes. Demolition permits are required in New Hanover County and most NC municipalities. We handle all permitting as part of our service.'},
+    {q: 'Do you handle hazardous material abatement?', a: 'We coordinate with licensed environmental specialists for asbestos, lead paint, and other hazardous material assessments and abatement when needed.'}
+  ],
+  'site-preparation': [
+    {q: 'What does site preparation include?', a: 'Site prep typically includes clearing, grubbing, rough grading, erosion control, utility prep, and access road construction to make the site ready for building.'},
+    {q: 'How long does site preparation take?', a: 'A typical residential site prep takes 3-7 days. Larger commercial sites may take 2-4 weeks depending on scope and conditions.'},
+    {q: 'Do you handle permits for site work?', a: 'Yes. We coordinate grading permits, erosion control plans, and other required permits with local authorities.'}
+  ],
+  'utilities': [
+    {q: 'What types of utilities do you install?', a: 'We handle trenching and installation for water lines, sewer lines, storm drainage, electrical conduit, and communication conduit.'},
+    {q: 'How deep are utility trenches?', a: 'Depth varies by utility type: water lines 18-36 inches, sewer lines 24-48+ inches, and electrical conduit 18-24 inches, per NC code requirements.'},
+    {q: 'Do you call 811 before digging?', a: 'Absolutely. We coordinate with NC 811 on every project to locate existing underground utilities before any trenching begins.'}
+  ]
 }
 
 // ========== API Routes ==========
@@ -380,7 +520,7 @@ ${pages.map(p => `  <url>
 // Homepage
 app.get('/', (c) => c.html(layout(homePage(), {
   title: 'PXG Siteworks | Excavation & Site Work Wilmington NC',
-  description: 'PXG Siteworks provides expert excavation, land clearing, grading, drainage, and site preparation in Wilmington NC. Licensed, insured, 20+ years experience. Free estimates.',
+  description: 'Expert excavation, land clearing, grading & drainage in Wilmington NC. Licensed, insured, 20+ years experience. Call (910) 515-7779 for a free estimate.',
   canonical: 'https://www.pxgsiteworks.com/',
   jsonLd: orgSchema + websiteSchema + breadcrumb([{name:'Home', url:'https://www.pxgsiteworks.com/'}])
 })))
@@ -388,7 +528,7 @@ app.get('/', (c) => c.html(layout(homePage(), {
 // About
 app.get('/about', (c) => c.html(layout(aboutPage(), {
   title: 'About PXG Siteworks | Wilmington NC Excavation Contractor',
-  description: 'PXG Siteworks is a locally owned excavation and site development company serving Wilmington, Hampstead, Sneads Ferry, and Leland NC with 20+ years of experience.',
+  description: 'Locally owned excavation contractor serving Wilmington, Hampstead, Sneads Ferry & Leland NC. 20+ years experience. Licensed & insured. Free estimates.',
   canonical: 'https://www.pxgsiteworks.com/about',
   currentPage: 'about',
   jsonLd: orgSchema + breadcrumb([{name:'Home', url:'https://www.pxgsiteworks.com/'}, {name:'About', url:'https://www.pxgsiteworks.com/about'}])
@@ -412,7 +552,7 @@ app.get('/faq', (c) => {
 }</script>`
   return c.html(layout(faqPage(), {
     title: 'FAQ | Excavation & Site Work Questions - PXG Siteworks',
-    description: 'Get answers to common questions about excavation, grading, land clearing, drainage, utility installation, and site work services in Wilmington NC. Free estimates available.',
+    description: 'Answers to common excavation, grading, land clearing & drainage questions in Wilmington NC. Free estimates. Call (910) 515-7779.',
     canonical: 'https://www.pxgsiteworks.com/faq',
     currentPage: 'faq',
     jsonLd: orgSchema + faqSchemaLd + breadcrumb([{name:'Home', url:'https://www.pxgsiteworks.com/'}, {name:'FAQ', url:'https://www.pxgsiteworks.com/faq'}])
@@ -422,7 +562,7 @@ app.get('/faq', (c) => {
 // Contact
 app.get('/contact', (c) => c.html(layout(contactPage(), {
   title: 'Contact PXG Siteworks | Free Excavation Quote Wilmington NC',
-  description: 'Contact PXG Siteworks for a free excavation, grading, or site work quote in Wilmington NC. Call (910) 515-7779 or send a message. We respond within 24 hours.',
+  description: 'Get a free excavation or site work quote in Wilmington NC. Call (910) 515-7779 or message us. We respond within 24 hours.',
   canonical: 'https://www.pxgsiteworks.com/contact',
   currentPage: 'contact',
   jsonLd: orgSchema + breadcrumb([{name:'Home', url:'https://www.pxgsiteworks.com/'}, {name:'Contact', url:'https://www.pxgsiteworks.com/contact'}])
@@ -431,7 +571,7 @@ app.get('/contact', (c) => c.html(layout(contactPage(), {
 // Careers
 app.get('/careers', (c) => c.html(layout(careersPage(), {
   title: 'Careers at PXG Siteworks | Excavation Jobs Wilmington NC',
-  description: 'Join PXG Siteworks! We are hiring excavator operators, site foremen, mechanics, and CDL drivers in Wilmington NC. Competitive pay, benefits, and paid time off.',
+  description: 'Join PXG Siteworks! Hiring excavator operators, foremen, mechanics & CDL drivers in Wilmington NC. Competitive pay & benefits.',
   canonical: 'https://www.pxgsiteworks.com/careers',
   currentPage: 'careers',
   jsonLd: orgSchema + breadcrumb([{name:'Home', url:'https://www.pxgsiteworks.com/'}, {name:'Careers', url:'https://www.pxgsiteworks.com/careers'}])
@@ -440,7 +580,7 @@ app.get('/careers', (c) => c.html(layout(careersPage(), {
 // Thank You
 app.get('/thank-you', (c) => c.html(layout(thankYouPage(), {
   title: 'Thank You | PXG Siteworks Wilmington NC',
-  description: 'Thank you for contacting PXG Siteworks. We will respond to your inquiry within 24 hours. Call (910) 515-7779 for immediate assistance.',
+  description: 'Thank you for contacting PXG Siteworks. We respond within 24 hours. Call (910) 515-7779 for immediate help.',
   canonical: 'https://www.pxgsiteworks.com/thank-you',
   jsonLd: orgSchema
 })))
@@ -448,7 +588,7 @@ app.get('/thank-you', (c) => c.html(layout(thankYouPage(), {
 // Service Areas
 app.get('/service-areas', (c) => c.html(layout(serviceAreasPage(), {
   title: 'Service Areas | Wilmington, Hampstead, Leland NC - PXG Siteworks',
-  description: 'PXG Siteworks serves Wilmington, Hampstead, Sneads Ferry, Leland, and all of New Hanover, Brunswick, Pender, and Onslow Counties with professional excavation services.',
+  description: 'PXG Siteworks serves Wilmington, Hampstead, Leland & Sneads Ferry. Excavation across New Hanover, Brunswick, Pender & Onslow Counties.',
   canonical: 'https://www.pxgsiteworks.com/service-areas',
   currentPage: 'service-areas',
   jsonLd: orgSchema + breadcrumb([{name:'Home', url:'https://www.pxgsiteworks.com/'}, {name:'Service Areas', url:'https://www.pxgsiteworks.com/service-areas'}])
@@ -457,7 +597,7 @@ app.get('/service-areas', (c) => c.html(layout(serviceAreasPage(), {
 // Blog
 app.get('/blog', (c) => c.html(layout(blogPage(), {
   title: 'Excavation & Site Work Blog | PXG Siteworks Wilmington NC',
-  description: 'Expert guides on excavation costs, land clearing pricing, site grading tips, and construction advice for Wilmington NC homeowners and builders. Updated for 2026.',
+  description: 'Excavation cost guides, land clearing pricing & site grading tips for Wilmington NC homeowners and builders. Updated 2026.',
   canonical: 'https://www.pxgsiteworks.com/blog',
   currentPage: 'blog',
   jsonLd: orgSchema + breadcrumb([{name:'Home', url:'https://www.pxgsiteworks.com/'}, {name:'Blog', url:'https://www.pxgsiteworks.com/blog'}])
@@ -467,19 +607,19 @@ app.get('/blog', (c) => c.html(layout(blogPage(), {
 const blogMeta: Record<string, {title: string; desc: string; date: string; author: string}> = {
   'land-clearing-cost-wilmington-nc-2026': {
     title: 'Land Clearing Cost in Wilmington NC (2026 Guide)',
-    desc: 'Complete 2026 guide to land clearing costs in Wilmington NC. Light clearing $1,500-$3,000/acre, heavy clearing $4,000-$8,000/acre. Factors, tips, and how to save.',
+    desc: '2026 land clearing costs in Wilmington NC. Light $1,500-$3,000/acre, heavy $4,000-$8,000/acre. Cost factors, tips & how to save.',
     date: '2026-02-12',
     author: 'PXG Siteworks Team'
   },
   'demolition-cost-wilmington-nc-2026': {
     title: 'Demolition Costs in Wilmington NC: 2026 Pricing Guide',
-    desc: 'Demolition cost guide for Wilmington NC in 2026. Small structures $1,000-$5,000, residential homes $8,000-$25,000. Full pricing breakdown and what to expect.',
+    desc: 'Demolition costs in Wilmington NC 2026. Small structures $1,000-$5,000, homes $8,000-$25,000. Full pricing breakdown & tips.',
     date: '2026-02-11',
     author: 'PXG Siteworks Team'
   },
   'site-grading-cost-wilmington-nc-2026': {
     title: 'Site Grading Costs in Wilmington NC (2026 Pricing)',
-    desc: 'Site grading cost guide for Wilmington NC. Residential lots $1,000-$5,000, large lots $3,000-$10,000. Why proper grading matters and what drives pricing.',
+    desc: 'Site grading costs in Wilmington NC. Residential lots $1,000-$5,000, large lots $3,000-$10,000. Why grading matters & pricing factors.',
     date: '2026-02-10',
     author: 'PXG Siteworks Team'
   }
@@ -497,7 +637,7 @@ app.get('/blog/:slug', (c) => {
   "headline": "${meta.title}",
   "description": "${meta.desc.replace(/"/g, '\\"')}",
   "datePublished": "${meta.date}",
-  "dateModified": "${meta.date}",
+  "dateModified": "2026-05-07",
   "author": {"@type": "Person", "name": "${meta.author}", "jobTitle": "Site Development Expert", "worksFor": {"@id": "https://www.pxgsiteworks.com/#organization"}},
   "publisher": {"@id": "https://www.pxgsiteworks.com/#organization"},
   "url": "https://www.pxgsiteworks.com/blog/${slug}",
@@ -516,7 +656,7 @@ app.get('/blog/:slug', (c) => {
 // Calculator
 app.get('/calculator', (c) => c.html(layout(calculatorPage(), {
   title: 'Land Clearing Cost Calculator | Free Quote - PXG Siteworks',
-  description: 'Get a free instant land clearing cost estimate for your Wilmington NC property. Answer a few questions and receive a detailed price breakdown in under 2 minutes.',
+  description: 'Free instant land clearing cost estimate for Wilmington NC. Answer a few questions, get a detailed price breakdown in under 2 minutes.',
   canonical: 'https://www.pxgsiteworks.com/calculator',
   currentPage: 'calculator',
   jsonLd: orgSchema + breadcrumb([{name:'Home', url:'https://www.pxgsiteworks.com/'}, {name:'Calculator', url:'https://www.pxgsiteworks.com/calculator'}])
@@ -526,57 +666,61 @@ app.get('/calculator', (c) => c.html(layout(calculatorPage(), {
 const serviceRoutes: Record<string, { title: string; desc: string }> = {
   'excavation': { 
     title: 'Excavation Services Wilmington NC', 
-    desc: 'Professional excavation and earthwork in Wilmington NC. Foundation digging, basement excavation, trenching, backfill, and compaction. Licensed, insured, free estimates.' 
+    desc: 'Professional excavation in Wilmington NC. Foundation digging, trenching, backfill & compaction. Licensed, insured. Free estimates.' 
   },
   'site-grading': { 
     title: 'Site Grading & Land Leveling Wilmington NC', 
-    desc: 'Expert site grading and land leveling in Wilmington NC. Proper drainage setup, foundation prep, erosion control, rough and finish grading for residential and commercial.' 
+    desc: 'Expert site grading in Wilmington NC. Drainage setup, foundation prep, erosion control. Rough & finish grading for residential and commercial.' 
   },
   'land-clearing': { 
     title: 'Land Clearing Services Wilmington NC', 
-    desc: 'Complete land clearing in Wilmington NC. Tree removal, brush clearing, stump grinding, debris hauling, and lot preparation. Residential and commercial projects.' 
+    desc: 'Complete land clearing in Wilmington NC. Tree removal, brush clearing, stump grinding & debris hauling. Residential and commercial.' 
   },
   'drainage-solutions': { 
     title: 'Drainage Solutions & Installation Wilmington NC', 
-    desc: 'Expert drainage installation in Wilmington NC. French drains, catch basins, stormwater management, and erosion prevention to protect your property from water damage.' 
+    desc: 'Expert drainage installation in Wilmington NC. French drains, catch basins & stormwater management. Protect your property from water damage.' 
   },
   'hauling-demolition': { 
     title: 'Hauling & Demolition Services Wilmington NC', 
-    desc: 'Safe demolition and material hauling in Wilmington NC. Structure removal, concrete demolition, debris hauling, and site cleanup. Licensed and insured contractor.' 
+    desc: 'Safe demolition and hauling in Wilmington NC. Structure removal, concrete demolition, debris hauling & site cleanup. Licensed & insured.' 
   },
   'site-preparation': { 
     title: 'Site Preparation Services Wilmington NC', 
-    desc: 'Complete site preparation in Wilmington NC. Clearing, grading, utility prep, access roads, and erosion control for residential and commercial construction projects.' 
+    desc: 'Complete site preparation in Wilmington NC. Clearing, grading, utility prep & erosion control for residential and commercial projects.' 
   },
   'utilities': { 
     title: 'Utility Trenching & Installation Wilmington NC', 
-    desc: 'Professional utility trenching in Wilmington NC. Water lines, sewer installation, storm drainage, culverts, catch basins, and electrical conduit trenching services.' 
+    desc: 'Professional utility trenching in Wilmington NC. Water lines, sewer, storm drainage, culverts & electrical conduit. Free estimates.' 
   },
   'driveway': { 
     title: 'Driveway Grading & Installation Wilmington NC', 
-    desc: 'Professional driveway grading, gravel installation, and base preparation in Wilmington NC. Culvert installation and drainage solutions for residential driveways.' 
+    desc: 'Driveway grading, gravel installation & base preparation in Wilmington NC. Culvert installation and drainage for residential driveways.' 
   },
   'grading': { 
     title: 'Professional Grading Services Wilmington NC', 
-    desc: 'Rough grading, fine grading, lot leveling, drainage grading, fill dirt work, and compaction services in Wilmington NC. Accurate grading for every project.' 
+    desc: 'Rough grading, fine grading, lot leveling & compaction in Wilmington NC. Accurate drainage grading for every project. Free estimates.' 
   },
   'drainage': { 
     title: 'Drainage Services Wilmington NC', 
-    desc: 'Comprehensive yard drainage, French drains, catch basins, culverts, stormwater management, and erosion control services in Wilmington NC and surrounding areas.' 
+    desc: 'Yard drainage, French drains, catch basins & culverts in Wilmington NC. Stormwater management and erosion control. Free estimates.' 
   },
 }
 
 for (const [slug, meta] of Object.entries(serviceRoutes)) {
-  app.get(`/services/${slug}`, (c) => c.html(layout(
-    servicePage(slug), 
-    { 
-      title: `${meta.title} | PXG Siteworks`, 
-      description: meta.desc, 
-      canonical: `https://www.pxgsiteworks.com/services/${slug}`, 
-      currentPage: 'services',
-      jsonLd: orgSchema + serviceSchema(meta.title, meta.desc, `https://www.pxgsiteworks.com/services/${slug}`) + breadcrumb([{name:'Home', url:'https://www.pxgsiteworks.com/'}, {name:'Services', url:'https://www.pxgsiteworks.com/#services'}, {name: meta.title, url:`https://www.pxgsiteworks.com/services/${slug}`}])
-    }
-  )))
+  app.get(`/services/${slug}`, (c) => {
+    const howTo = serviceHowToSteps[slug] ? howToSchema(meta.title, serviceHowToSteps[slug]) : ''
+    const faq = serviceFaqs[slug] ? serviceFaqSchema(serviceFaqs[slug]) : ''
+    return c.html(layout(
+      servicePage(slug), 
+      { 
+        title: `${meta.title} | PXG Siteworks`, 
+        description: meta.desc, 
+        canonical: `https://www.pxgsiteworks.com/services/${slug}`, 
+        currentPage: 'services',
+        jsonLd: orgSchema + serviceSchema(meta.title, meta.desc, `https://www.pxgsiteworks.com/services/${slug}`) + howTo + faq + breadcrumb([{name:'Home', url:'https://www.pxgsiteworks.com/'}, {name:'Services', url:'https://www.pxgsiteworks.com/#services'}, {name: meta.title, url:`https://www.pxgsiteworks.com/services/${slug}`}])
+      }
+    ))
+  })
 }
 
 // Legacy URL redirects from the old Base44 app
