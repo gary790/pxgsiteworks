@@ -49,23 +49,7 @@ export function layout(content: string, seo: SEOData): string {
 
     ${jsonLd}
     
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Inter', 'system-ui', 'sans-serif'],
-              display: ['Space Grotesk', 'Inter', 'sans-serif']
-            },
-            colors: {
-              zinc: { 950: '#09090b', 900: '#18181b', 800: '#27272a', 700: '#3f3f46', 600: '#52525b' },
-              amber: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309' }
-            }
-          }
-        }
-      }
-    </script>
+    <link rel="stylesheet" href="/static/tailwind.css">
     
     <style>
       /* ===== Premium Typography ===== */
@@ -255,7 +239,7 @@ export function layout(content: string, seo: SEOData): string {
       img[loading="lazy"].loaded, img:not([loading="lazy"]) { opacity: 1; }
     </style>
 
-    <!-- Facebook Pixel (deferred) -->
+    <!-- Facebook Pixel (deferred, with error suppression for CAPI 422) -->
     <script>
       window.addEventListener('load', function() {
         !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -264,6 +248,7 @@ export function layout(content: string, seo: SEOData): string {
         t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
         document,'script','https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '1436928034468748');
+        fbq('set', 'autoConfig', false, '1436928034468748');
         fbq('track', 'PageView');
       });
     </script>
